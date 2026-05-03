@@ -54,13 +54,17 @@ body {
   margin: 0;
 }
 
+html, body {
+  height: 100%;
+}
+
 #root {
   width: 1126px;
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
   border-inline: 1px solid var(--border);
-  min-height: 100svh;
+  height: 100dvh; /* Fits perfectly on mobile screens */
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
