@@ -1,16 +1,69 @@
-# React + Vite
+# ChatApp
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A real-time, room-based chat application built with a **React (Vite)** frontend and a **Java JSR-356 WebSocket** backend.
 
-Currently, two official plugins are available:
+[Go Chat Now](https://tonykennah.github.io/chatapp/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Features
 
-## React Compiler
+- **Real-time Messaging**: Instant communication via WebSockets.
+- **Room Support**: Dynamic path-based chat rooms.
+- **Live User List**: See who is currently active in the room.
+- **Responsive UI**: A clean, modern chat interface.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 💻 Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Frontend
+- **React** (Vite)
+- **CSS3** (Custom styling)
+- **WebSockets API** (Native browser support)
+
+### Backend
+- **Java** (Jakarta/JSR-356 WebSocket API)
+- **Concurrent Collections**: Thread-safe session management.
+
+---
+
+## 🛠️ Installation & Setup
+
+### 1. Backend (Java)
+- Beyond the scpe of this document.
+
+### 2. Frontend (React)
+1. **Clone the repo**:
+   ```bash
+   git clone https://github.com
+   cd ChatApp
+   ```
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+3. **Run locally**:
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 🚢 Deployment (GitHub Pages)
+
+This project is deployed via the `gh-pages` package.
+
+1. **Build and Deploy**:
+   ```bash
+   npm run deploy
+   ```
+2. **Base Path**: The application uses the base path `/ChatApp/` to ensure assets load correctly on GitHub Pages.
+
+---
+
+## ⚠️ Connectivity Note
+
+Because GitHub Pages uses **HTTPS**, browsers may block the connection to a local **WS** (insecure) server. 
+
+- **To test**: Click the "Shield" icon or "Site Settings" in your browser and select **"Allow Insecure Content"**.
+- **Production**: Requires a backend with **SSL (WSS)** support.
+
