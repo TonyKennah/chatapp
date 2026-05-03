@@ -2,7 +2,7 @@
 
 A real-time, room-based chat application built with a **React (Vite)** frontend and a **Java JSR-356 WebSocket** backend.
 
-[Go Chat Now](https://tonykennah.github.io/chatapp/)
+[Go Chat Now](https://tonykennah.github.io/ChatApp/)
 
 ## 🚀 Features
 
