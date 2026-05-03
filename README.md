@@ -29,7 +29,7 @@ A real-time, room-based chat application built with a **React (Vite)** frontend 
 ## 🛠️ Installation & Setup
 
 ### 1. Backend (Java)
-- Beyond the scpe of this document.
+- Beyond the scope of this document.
 
 ### 2. Frontend (React)
 1. **Clone the repo**:
