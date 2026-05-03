@@ -27,7 +27,7 @@ function App() {
 
       socket.current.onmessage = (event) => {
         const data = event.data;
-        if (typeof data === 'string' && data.startsWith('USERLIST:')) {
+        if (data && typeof data === 'string' && data.startsWith('USERLIST:')) {
           const userArray = data.substring(9).split(',').filter(Boolean);
           setUsers(userArray);
         } else {
@@ -57,7 +57,7 @@ function App() {
 
   if (!isLoggedIn) {
     return (
-      <div className="login-container">
+      <div className={`login-container ${theme}`}>
         <form onSubmit={handleJoin}>
           <h1>Join Chat</h1>
           <input 
@@ -73,7 +73,7 @@ function App() {
   }
 
   return (
-    <div className="chat-container">
+    <div className={`chat-container ${theme}`}>
       <header>
         <span>Room: General (Logged in as {username})</span>
         <div className="theme-toggle">
@@ -96,8 +96,8 @@ function App() {
         <aside className="user-list">
           <h3>Users ({users.length})</h3>
           <ul>
-            {users.map((user, i) => (
-              <li key={i} className={user === username ? 'self' : ''}>
+            {users.map((user) => (
+              <li key={user} className={user === username ? 'self' : ''}>
                 {user} {user === username ? '(You)' : ''}
               </li>
             ))}
