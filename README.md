@@ -57,13 +57,3 @@ This project is deployed via the `gh-pages` package.
    npm run deploy
    ```
 2. **Base Path**: The application uses the base path `/ChatApp/` to ensure assets load correctly on GitHub Pages.
-
----
-
-## ⚠️ Connectivity Note
-
-Because GitHub Pages uses **HTTPS**, browsers may block the connection to a local **WS** (insecure) server. 
-
-- **To test**: Click the "Shield" icon or "Site Settings" in your browser and select **"Allow Insecure Content"**.
-- **Production**: Requires a backend with **SSL (WSS)** support.
-
