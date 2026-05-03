@@ -45,15 +45,3 @@ A real-time, room-based chat application built with a **React (Vite)** frontend 
    ```bash
    npm run dev
    ```
-
----
-
-## 🚢 Deployment (GitHub Pages)
-
-This project is deployed via the `gh-pages` package.
-
-1. **Build and Deploy**:
-   ```bash
-   npm run deploy
-   ```
-2. **Base Path**: The application uses the base path `/ChatApp/` to ensure assets load correctly on GitHub Pages.
