@@ -9,6 +9,7 @@ function App() {
   const [users, setUsers] = useState([]);
   const [chatLog, setChatLog] = useState([]);
   const socket = useRef(null);
+  const chatBoxRef = useRef(null); // Ref for the chat messages container
 
   // Apply theme to the HTML element
   useEffect(() => {
@@ -36,6 +37,14 @@ function App() {
       return () => socket.current.close();
     }
   }, [isLoggedIn]);
+
+  // Auto-scroll to the bottom when chatLog updates
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [chatLog]);
+
 
   const handleJoin = (e) => {
     e.preventDefault();
@@ -84,7 +93,7 @@ function App() {
         </div>
       </header>
       <div className="chat-main">
-        <div className="chat-box">
+        <div className="chat-box" ref={chatBoxRef}>
           {chatLog.map((msg, i) => (
             <div key={i} className="message">{msg}</div>
           ))}
