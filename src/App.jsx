@@ -8,43 +8,77 @@ function App() {
   const [message, setMessage] = useState('');
   const [users, setUsers] = useState([]);
   const [chatLog, setChatLog] = useState([]);
+  
   const socket = useRef(null);
-  const chatBoxRef = useRef(null); // Ref for the chat messages container
+  const chatBoxRef = useRef(null);
+  const workerRef = useRef(null); // Keep worker in a ref
 
-  // Apply theme to the HTML element
+  // Apply theme
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  // Connect to WebSocket once the user joins
-  useEffect(() => {
-    if (isLoggedIn) {
-      // Connect to your endpoint with a room parameter
-      socket.current = new WebSocket(`wss://www.pluckier.co.uk/utils/chatservice/general/${username}`);
+  const connectWebSocket = () => {
+    if (!isLoggedIn) return;
 
-      socket.current.onmessage = (event) => {
-        const data = event.data;
-        if (data && typeof data === 'string' && data.startsWith('USERLIST:')) {
-          const userArray = data.substring(9).split(',').filter(Boolean);
-          setUsers(userArray);
-        } else {
-          setChatLog((prev) => [...prev, data]);
+    socket.current = new WebSocket(`wss://www.pluckier.co.uk/utils/chatservice/general/${username}`);
+
+    // Start Worker Heartbeat
+    if (!workerRef.current) {
+      workerRef.current = new Worker('heartbeatWorker.js');
+      workerRef.current.onmessage = () => {
+        if (socket.current?.readyState === WebSocket.OPEN) {
+          socket.current.send("PING");
+          console.log("Worker triggered PING");
         }
       };
-
-      socket.current.onclose = () => console.log("WebSocket Disconnected");
-      
-      return () => socket.current.close();
     }
+    workerRef.current.postMessage('START');
+
+    socket.current.onmessage = (event) => {
+      const data = event.data;
+      if (data === "PONG") {
+        console.log("Received PONG from server");
+        return;
+      }
+
+      if (data?.startsWith('USERLIST:')) {
+        const userArray = data.substring(9).split(',').filter(Boolean);
+        setUsers(userArray);
+      } else {
+        setChatLog((prev) => [...prev, data]);
+      }
+    };
+
+    socket.current.onclose = () => {
+      console.log("WebSocket Disconnected. Attempting reconnect in 5s...");
+      workerRef.current?.postMessage('STOP');
+      
+      // Auto-reconnect logic
+      setTimeout(() => {
+        if (isLoggedIn) connectWebSocket();
+      }, 5000);
+    };
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      connectWebSocket();
+    }
+
+    return () => {
+      socket.current?.close();
+      workerRef.current?.terminate();
+      workerRef.current = null;
+    };
   }, [isLoggedIn]);
 
-  // Auto-scroll to the bottom when chatLog updates
+  // Auto-scroll
   useEffect(() => {
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
   }, [chatLog]);
-
 
   const handleJoin = (e) => {
     e.preventDefault();
@@ -53,9 +87,8 @@ function App() {
 
   const sendMessage = (e) => {
     e.preventDefault();
-    if (message.trim() && socket.current) {
-      const payload = `${username}: ${message}`;
-      socket.current.send(payload);
+    if (message.trim() && socket.current?.readyState === WebSocket.OPEN) {
+      socket.current.send(`${username}: ${message}`);
       setMessage('');
     }
   };
@@ -82,14 +115,8 @@ function App() {
       <header>
         <span>Room: General (Logged in as {username})</span>
         <div className="theme-toggle">
-          <button 
-            onClick={() => setTheme('light')} 
-            className={theme === 'light' ? 'active' : ''}
-          >☀️</button>
-          <button 
-            onClick={() => setTheme('dark')} 
-            className={theme === 'dark' ? 'active' : ''}
-          >🌙</button>
+          <button onClick={() => setTheme('light')} className={theme === 'light' ? 'active' : ''}>☀️</button>
+          <button onClick={() => setTheme('dark')} className={theme === 'dark' ? 'active' : ''}>🌙</button>
         </div>
       </header>
       <div className="chat-main">
@@ -101,8 +128,8 @@ function App() {
         <aside className="user-list">
           <h3>Users ({users.length})</h3>
           <ul>
-            {users.map((user) => (
-              <li key={user} className={user === username ? 'self' : ''}>
+            {users.map((user, idx) => (
+              <li key={`${user}-${idx}`} className={user === username ? 'self' : ''}>
                 {user} {user === username ? '(You)' : ''}
               </li>
             ))}
