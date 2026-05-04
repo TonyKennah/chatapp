@@ -100,6 +100,7 @@ header {
 .user-list li.self { font-weight: bold; color: var(--text); }
 
 .message {
+  text-align: left;
   background: var(--msg-bg);
   color: var(--text);
   padding: 8px 12px;
@@ -107,6 +108,19 @@ header {
   width: fit-content;
   max-width: 80%;
   border: 1px solid var(--border);
+}
+
+.message .msg-user {
+  font-size: 1.15rem; /* Slightly larger for better readability */
+  font-weight: bold;
+  color: var(--text); /* Ensure it contrasts well */
+  opacity: 0.9; /* Make it a bit more prominent */
+  margin-right: 4px; /* Small space between username and message */
+  white-space: nowrap; /* Keep username on one line */
+}
+
+.message .msg-text {
+  word-break: break-word;
 }
 
 .input-area {

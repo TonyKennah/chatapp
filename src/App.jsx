@@ -46,7 +46,18 @@ function App() {
         const userArray = data.substring(9).split(',').filter(Boolean);
         setUsers(userArray);
       } else {
-        setChatLog((prev) => [...prev, data]);
+        try {
+          const parsed = JSON.parse(data);
+          setChatLog((prev) => [...prev, parsed]);
+        } catch (e) {
+          // Fallback for legacy strings "User: Message"
+          if (typeof data === 'string' && data.includes(': ')) {
+            const [user, ...rest] = data.split(': ');
+            setChatLog((prev) => [...prev, { user, text: rest.join(': ') }]);
+          } else {
+            setChatLog((prev) => [...prev, { text: data }]);
+          }
+        }
       }
     };
 
@@ -88,7 +99,8 @@ function App() {
   const sendMessage = (e) => {
     e.preventDefault();
     if (message.trim() && socket.current?.readyState === WebSocket.OPEN) {
-      socket.current.send(`${username}: ${message}`);
+      const payload = JSON.stringify({ user: username, text: message });
+      socket.current.send(payload);
       setMessage('');
     }
   };
@@ -122,7 +134,10 @@ function App() {
       <div className="chat-main">
         <div className="chat-box" ref={chatBoxRef}>
           {chatLog.map((msg, i) => (
-            <div key={i} className="message">{msg}</div>
+            <div key={i} className="message"> {/* Use a single div for the message block */}
+              {msg.user && <span className="msg-user">{msg.user}: </span>} {/* Add colon and space */}
+              <span className="msg-text">{msg.text}</span>
+            </div>
           ))}
         </div>
         <aside className="user-list">
