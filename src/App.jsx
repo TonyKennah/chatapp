@@ -19,11 +19,7 @@ function App() {
   useEffect(() => {
     if (isLoggedIn) {
       // Connect to your endpoint with a room parameter
-      socket.current = new WebSocket('ws://localhost:8080/chatservice/general');
-
-      socket.current.onopen = () => {
-        socket.current.send(`JOIN:${username}`);
-      };
+      socket.current = new WebSocket(`ws://localhost:8080/chatservice/general/${username}`);
 
       socket.current.onmessage = (event) => {
         const data = event.data;
