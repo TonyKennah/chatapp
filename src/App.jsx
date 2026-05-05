@@ -29,7 +29,6 @@ function App() {
       workerRef.current.onmessage = () => {
         if (socket.current?.readyState === WebSocket.OPEN) {
           socket.current.send("PING");
-          console.log("Worker triggered PING");
         }
       };
     }
@@ -38,7 +37,6 @@ function App() {
     socket.current.onmessage = (event) => {
       const data = event.data;
       if (data === "PONG") {
-        console.log("Received PONG from server");
         return;
       }
 
@@ -62,7 +60,6 @@ function App() {
     };
 
     socket.current.onclose = () => {
-      console.log("WebSocket Disconnected. Attempting reconnect in 5s...");
       workerRef.current?.postMessage('STOP');
       
       // Auto-reconnect logic
