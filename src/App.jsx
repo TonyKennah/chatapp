@@ -150,6 +150,7 @@ function App() {
           </button>
           <button onClick={() => setTheme('light')} className={theme === 'light' ? 'active' : ''}>☀️</button>
           <button onClick={() => setTheme('dark')} className={theme === 'dark' ? 'active' : ''}>🌙</button>
+          <button onClick={() => setTheme('funky')} className={theme === 'funky' ? 'active' : ''}>🎸</button>
         </div>
       </header>
       <div className="chat-main">

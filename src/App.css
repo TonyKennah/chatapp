@@ -33,6 +33,18 @@
   --input-bg: #2d2d2d;
 }
 
+:root[data-theme='funky'] {
+  --bg-body: #120458;
+  --bg-card: #2d033b;
+  --text: #00f5ff;
+  --text-h: #ff00ff;
+  --header-bg: linear-gradient(to right, #7b1fa2, #e91e63);
+  --header-text: #ffffff;
+  --msg-bg: #4b0082;
+  --border: #ff00ff;
+  --input-bg: #120458;
+}
+
 .login-container form {
   background: var(--bg-card);
   color: var(--text);
