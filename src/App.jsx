@@ -93,6 +93,22 @@ function App() {
     if (username.trim()) setIsLoggedIn(true);
   };
 
+  // Helper to parse URLs and turn them into clickable links
+  const renderMessageText = (text) => {
+    if (!text) return '';
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.split(urlRegex).map((part, index) => {
+      if (part.match(/^https?:\/\//)) {
+        return (
+          <a key={index} href={part} target="_blank" rel="noopener noreferrer">
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
+
   const sendMessage = (e) => {
     e.preventDefault();
     if (message.trim() && socket.current?.readyState === WebSocket.OPEN) {
@@ -133,7 +149,7 @@ function App() {
           {chatLog.map((msg, i) => (
             <div key={i} className="message"> {/* Use a single div for the message block */}
               {msg.user && <span className="msg-user">{msg.user}: </span>} {/* Add colon and space */}
-              <span className="msg-text">{msg.text}</span>
+              <span className="msg-text">{renderMessageText(msg.text)}</span>
             </div>
           ))}
         </div>
