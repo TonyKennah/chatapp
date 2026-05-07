@@ -8,6 +8,7 @@ function App() {
   const [message, setMessage] = useState('');
   const [users, setUsers] = useState([]);
   const [chatLog, setChatLog] = useState([]);
+  const [autoScroll, setAutoScroll] = useState(true);
   
   const socket = useRef(null);
   const chatBoxRef = useRef(null);
@@ -83,10 +84,10 @@ function App() {
 
   // Auto-scroll
   useEffect(() => {
-    if (chatBoxRef.current) {
+    if (autoScroll && chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
-  }, [chatLog]);
+  }, [chatLog, autoScroll]);
 
   const handleJoin = (e) => {
     e.preventDefault();
@@ -140,6 +141,13 @@ function App() {
       <header>
         <span>Room: General (Logged in as {username})</span>
         <div className="theme-toggle">
+          <button 
+            onClick={() => setAutoScroll(!autoScroll)} 
+            className={autoScroll ? 'active' : ''}
+            title={autoScroll ? "Disable Auto-scroll" : "Enable Auto-scroll"}
+          >
+            {autoScroll ? '⬇️' : '✋'}
+          </button>
           <button onClick={() => setTheme('light')} className={theme === 'light' ? 'active' : ''}>☀️</button>
           <button onClick={() => setTheme('dark')} className={theme === 'dark' ? 'active' : ''}>🌙</button>
         </div>
