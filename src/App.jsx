@@ -155,12 +155,22 @@ function App() {
       </header>
       <div className="chat-main">
         <div className="chat-box" ref={chatBoxRef}>
-          {chatLog.map((msg, i) => (
-            <div key={i} className="message"> {/* Use a single div for the message block */}
-              {msg.user && <span className="msg-user">{msg.user}: </span>} {/* Add colon and space */}
-              <span className="msg-text">{renderMessageText(msg.text)}</span>
-            </div>
-          ))}
+          {chatLog.map((msg, i) => {
+            const isQuestion = msg.text?.trim().startsWith('QUESTION')  || msg.text?.trim().startsWith('Q:');
+            const highlightStyle = isQuestion ? {
+              backgroundColor: 'rgba(255, 255, 0, 0.2)',
+              borderLeft: '5px solid #ffcc00',
+              paddingLeft: '12px',
+              borderRadius: '4px 15px 15px 4px' // Squares the left side to align with the border
+            } : {};
+
+            return (
+              <div key={i} className="message" style={highlightStyle}>
+                {msg.user && <span className="msg-user">{msg.user}: </span>}
+                <span className="msg-text">{renderMessageText(msg.text)}</span>
+              </div>
+            );
+          })}
         </div>
         <aside className="user-list">
           <h3>Users ({users.length})</h3>
