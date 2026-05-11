@@ -142,6 +142,24 @@ function App() {
           );
         }
 
+        // Rumble Detection (Direct Embed Links)
+        const rumbleMatch = part.match(/rumble\.com\/embed\/([a-z0-9]+)/i);
+        if (rumbleMatch) {
+          return (
+            <div key={index} style={{ marginTop: '8px', maxWidth: '400px' }}>
+              <iframe
+                width="100%"
+                height="225"
+                src={`https://rumble.com/embed/${rumbleMatch[1]}/`}
+                title="Rumble video player"
+                frameBorder="0"
+                allow="autoplay; fullscreen"
+                style={{ borderRadius: '8px' }}
+              ></iframe>
+            </div>
+          );
+        }
+
         // Fallback to standard link
         return <a key={index} href={part} target="_blank" rel="noopener noreferrer">{part}</a>;
       }
