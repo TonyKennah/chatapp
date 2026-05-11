@@ -106,11 +106,44 @@ function App() {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return text.split(urlRegex).map((part, index) => {
       if (part.match(/^https?:\/\//)) {
-        return (
-          <a key={index} href={part} target="_blank" rel="noopener noreferrer">
-            {part}
-          </a>
-        );
+        // Image Detection
+        if (part.match(/\.(jpeg|jpg|gif|png|webp)$/i)) {
+          return (
+            <img 
+              key={index} 
+              src={part} 
+              alt="Shared content" 
+              style={{ width: '100px', height: '100px', objectFit: 'cover', display: 'block', borderRadius: '8px', marginTop: '8px' }} 
+            />
+          );
+        }
+
+        // Audio Detection
+        if (part.match(/\.(mp3|wav|ogg)$/i)) {
+          return <audio key={index} controls src={part} style={{ display: 'block', marginTop: '8px', maxWidth: '100%' }} />;
+        }
+
+        // YouTube Detection
+        const ytMatch = part.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=|shorts\/)|youtu\.be\/)([^"&?\/\s]{11})/);
+        if (ytMatch) {
+          return (
+            <div key={index} style={{ marginTop: '8px', maxWidth: '400px' }}>
+              <iframe
+                width="100%"
+                height="225"
+                src={`https://www.youtube.com/embed/${ytMatch[1]}`}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{ borderRadius: '8px' }}
+              ></iframe>
+            </div>
+          );
+        }
+
+        // Fallback to standard link
+        return <a key={index} href={part} target="_blank" rel="noopener noreferrer">{part}</a>;
       }
       return part;
     });
