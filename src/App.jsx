@@ -9,6 +9,12 @@ function App() {
   const [users, setUsers] = useState([]);
   const [chatLog, setChatLog] = useState([]);
   const [autoScroll, setAutoScroll] = useState(true);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
   
   const socket = useRef(null);
   const chatBoxRef = useRef(null);
@@ -139,7 +145,19 @@ function App() {
   return (
     <div className={`chat-container ${theme}`}>
       <header>
-        <span>Room: General (Logged in as {username})</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <span>Room: General (Logged in as {username})</span>
+          <span style={{ fontSize: '0.85rem', opacity: 0.8, fontVariantNumeric: 'tabular-nums' }}>
+            {currentTime.toLocaleString('en-GB', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true
+            })}
+          </span>
+        </div>
         <div className="theme-toggle">
           <button 
             onClick={() => setAutoScroll(!autoScroll)} 
@@ -185,11 +203,12 @@ function App() {
       </div>
       <form className="input-area" onSubmit={sendMessage}>
         <input 
+          style={{ fontSize: '1.1rem', padding: '12px' }}
           value={message} 
           onChange={(e) => setMessage(e.target.value)} 
           placeholder="Type a message..."
         />
-        <button type="submit">Send</button>
+        <button type="submit" style={{ fontSize: '1.1rem', padding: '10px 24px' }}>Send</button>
       </form>
     </div>
   );
