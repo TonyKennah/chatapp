@@ -190,6 +190,12 @@ function App() {
               hour12: true
             })}
           </span>
+          <span style={{ fontSize: '0.85rem', padding: '2px 8px', backgroundColor: 'rgba(255, 204, 0, 0.3)', borderRadius: '4px', fontWeight: 'bold' }}>
+            Questions: {chatLog.filter(msg => 
+              msg.text?.trim().startsWith('QUESTION') || 
+              msg.text?.trim().startsWith('Q:')
+            ).length}
+          </span>
         </div>
         <div className="theme-toggle">
           <button 
