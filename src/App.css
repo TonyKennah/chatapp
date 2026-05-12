@@ -139,6 +139,7 @@ header {
   display: flex;
   padding: 1rem;
   border-top: 1px solid var(--border);
+  margin-bottom: 25px;
 }
 
 .input-area input {
